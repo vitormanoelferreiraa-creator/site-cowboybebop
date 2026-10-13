@@ -1,0 +1,62 @@
+/* CRT Scanline Overlay */
+.crt::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+    z-index: 50;
+    background-size: 100% 3px, 6px 100%;
+    pointer-events: none;
+}
+
+/* Subtle Screen Flicker */
+@keyframes flicker {
+    0% { opacity: 0.987; }
+    50% { opacity: 1; }
+    100% { opacity: 0.992; }
+}
+
+.crt-flicker {
+    animation: flicker 0.15s infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0a0d14;
+    border-left: 1px solid #2a3447;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ea580c;
+    border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #f59e0b;
+}
+
+.glow-amber {
+    text-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+}
+
+.glow-cyan {
+    text-shadow: 0 0 8px rgba(6, 182, 212, 0.6);
+}
+
+.social-card {
+    transition: all 0.2s ease-in-out;
+}
+
+.social-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+}

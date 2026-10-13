@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-950 text-amber-100 selection:bg-amber-500 selection:text-slate-950">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BEBOP NET // BOUNTY BOARD v3.05</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bebop: {
+                            bg: '#0a0d14',
+                            panel: '#121722',
+                            border: '#2a3447',
+                            amber: '#f59e0b',
+                            amberGlow: '#fbbf24',
+                            orange: '#ea580c',
+                            cyan: '#06b6d4',
+                            red: '#dc2626',
+                            muted: '#64748b'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Chakra Petch"', 'sans-serif'],
+                        mono: ['"Share Tech Mono"', 'monospace'],
+                        crt: ['"VT323"', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,500&family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Seus Arquivos CSS Locais Corrigidos -->
+    <link rel="stylesheet" href="./css/styleboy.css">
+    <link rel="stylesheet" href="./responsivo/responsivo.css">
+</head>
+<body class="min-h-screen bg-slate-950 crt crt-flicker flex flex-col font-sans overflow-x-hidden antialiased select-none">
+
+    <!-- Header Responsivo -->
+    <header class="bg-bebop-panel border-b-2 border-bebop-amber px-3 sm:px-4 py-2.5 relative z-10 flex flex-wrap items-center justify-between gap-3 shadow-lg">
+        <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 border-2 border-bebop-amber rounded flex items-center justify-center bg-amber-950/30 text-bebop-amber text-lg sm:text-xl font-bold shrink-0">
+                <i class="fa-solid font-mono text-xl sm:text-2xl">₩</i>
+            </div>
+            <div>
+                <h1 class="text-base sm:text-xl md:text-2xl font-bold tracking-wider text-bebop-amber glow-amber flex items-center gap-2">
+                    BEBOP NET <span class="text-[10px] sm:text-xs bg-bebop-orange text-slate-950 px-1.5 py-0.5 rounded font-mono uppercase">Syndicate HQ</span>
+                </h1>
+                <p class="text-[10px] sm:text-xs font-mono text-bebop-muted tracking-widest uppercase">SOLAR SYSTEM BOUNTY HUNTERS GUILD v3.05</p>
+            </div>
+        </div>
+
+        <!-- System Telemetry Ticker Top -->
+        <div class="hidden lg:flex items-center space-x-6 font-mono text-xs text-bebop-muted">
+            <div class="flex items-center space-x-2">
+                <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                <span>GATE STATUS: <strong class="text-emerald-400">CLEAR</strong></span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span>FREQ: <strong class="text-bebop-cyan">142.09 MHz</strong></span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span>ST TIME: <strong id="clock" class="text-bebop-amber font-bold">2071-10-24 --:--:--</strong></span>
+            </div>
+        </div>
+
+        <!-- Audio Player Quick Bar -->
+        <div class="flex items-center space-x-2 sm:space-x-3 bg-slate-900/80 border border-bebop-border px-2.5 py-1.5 rounded">
+            <button id="bgmToggleBtn" onclick="toggleAudio()" class="text-bebop-amber hover:text-white transition flex items-center gap-1.5 sm:gap-2 text-xs font-mono">
+                <i id="bgmIcon" class="fa-solid fa-play"></i>
+                <span id="bgmText">SYNTH RADIO</span>
+            </button>
+            <div class="h-4 w-[1px] bg-bebop-border"></div>
+            <button onclick="playBeep(800, 0.05)" class="text-xs font-mono text-bebop-cyan hover:underline" title="Toggle UI Sound Effects">
+                <i class="fa-solid fa-volume-high"></i> SFX
+            </button>
+        </div>
+    </header>
+
+    <!-- Navegação com Scroll Horizontal para Mobile -->
+    <nav class="bg-slate-900 border-b border-bebop-border px-3 sm:px-4 py-1 flex space-x-2 sm:space-x-4 overflow-x-auto text-xs sm:text-sm font-semibold font-mono tracking-wider whitespace-nowrap">
+        <button onclick="switchTab('bounty-board')" id="tab-bounty-board" class="tab-btn active px-3 sm:px-4 py-2 border-b-2 border-bebop-amber text-bebop-amber bg-amber-950/20 flex items-center gap-2 transition shrink-0">
+            <i class="fa-solid fa-crosshairs"></i> TRANSMISSION FEED
+        </button>
+        <button onclick="switchTab('my-station')" id="tab-my-station" class="tab-btn px-3 sm:px-4 py-2 border-b-2 border-transparent text-bebop-muted hover:text-bebop-amber flex items-center gap-2 transition shrink-0">
+            <i class="fa-solid fa-satellite"></i> MY STATION & LINKS
+        </button>
+        <button onclick="switchTab('crew-log')" id="tab-crew-log" class="tab-btn px-3 sm:px-4 py-2 border-b-2 border-transparent text-bebop-muted hover:text-bebop-amber flex items-center gap-2 transition shrink-0">
+            <i class="fa-solid fa-users-gear"></i> CREW LOG
+        </button>
+        <button onclick="switchTab('system-telemetry')" id="tab-system-telemetry" class="tab-btn px-3 sm:px-4 py-2 border-b-2 border-transparent text-bebop-muted hover:text-bebop-amber flex items-center gap-2 transition shrink-0">
+            <i class="fa-solid fa-satellite-dish"></i> TELEMETRY
+        </button>
+    </nav>
+
+    <!-- Main Grid Responsiva -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
+
+        <!-- LEFT SIDEBAR: PROFILE & LINKS -->
+        <aside class="lg:col-span-3 space-y-4 sm:space-y-6 w-full order-2 lg:order-1">
+
+            <!-- Spike Spiegel Profile Card -->
+            <div class="bg-bebop-panel border border-bebop-border rounded-lg p-3.5 sm:p-4 relative overflow-hidden shadow-md">
+                <div class="absolute top-0 right-0 bg-bebop-amber text-slate-950 font-mono text-[10px] font-bold px-2 py-0.5 uppercase">ID: 00293</div>
+                <div class="flex items-center space-x-3 mb-3">
+                    <div class="relative w-14 h-14 sm:w-16 sm:h-16 border-2 border-bebop-amber rounded bg-slate-800 overflow-hidden shrink-0">
+                        <img src="./img/spaik.jpeg" alt="Spike Spiegel" class="w-full h-full object-cover filter brightness-90 contrast-110" onerror="this.src='https://placehold.co/150x150/121722/f59e0b?text=SPIKE';">
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base sm:text-lg text-amber-100 tracking-wide">SPIKE SPIEGEL</h3>
+                        <p class="text-xs font-mono text-emerald-400 flex items-center gap-1">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400"></span> ACTIVE HUNTER
+                        </p>
+                        <p class="text-xs font-mono text-bebop-muted mt-1">SHIP: MONO 3-26</p>
+                    </div>
+                </div>
+
+                <div class="space-y-2 border-t border-bebop-border pt-3 font-mono text-xs">
+                    <div class="flex justify-between items-center">
+                        <span class="text-bebop-muted">CURRENT BALANCE:</span>
+                        <span id="userBalance" class="text-bebop-amber font-bold text-sm glow-amber">50,000 ₩</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-bebop-muted">SUCCEEDED CLAIMS:</span>
+                        <span class="text-slate-200">18</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-bebop-muted">HAZARD RATING:</span>
+                        <span class="text-bebop-red font-bold">CLASS S</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Links Quick Terminal Bar -->
+            <div class="bg-bebop-panel border border-bebop-border rounded-lg p-3.5 sm:p-4 font-mono text-xs">
+                <div class="flex justify-between items-center mb-3 border-b border-bebop-border pb-1">
+                    <h4 class="text-bebop-amber font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-link"></i> NET FREQUENCIES
+                    </h4>
+                    <button onclick="switchTab('my-station')" class="text-[10px] text-bebop-cyan hover:underline">EDIT</button>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <a id="quick-github" href="https://github.com/vitormanoelferreiraa-creator" target="_blank" class="social-card bg-slate-900 border border-bebop-border hover:border-bebop-amber p-2 rounded flex items-center gap-2 text-slate-300 hover:text-bebop-amber">
+                        <i class="fa-brands fa-github text-sm"></i>
+                        <span class="truncate">GitHub</span>
+                    </a>
+                    <a id="quick-linkedin" href="https://www.linkedin.com" target="_blank" class="social-card bg-slate-900 border border-bebop-border hover:border-bebop-amber p-2 rounded flex items-center gap-2 text-slate-300 hover:text-bebop-amber">
+                        <i class="fa-brands fa-linkedin text-sm text-bebop-cyan"></i>
+                        <span class="truncate">LinkedIn</span>
+                    </a>
+                    <a id="quick-portfolio" href="#" target="_blank" class="social-card bg-slate-900 border border-bebop-border hover:border-bebop-amber p-2 rounded flex items-center gap-2 text-slate-300 hover:text-bebop-amber">
+                        <i class="fa-solid fa-globe text-sm text-bebop-amber"></i>
+                        <span class="truncate">Portfolio</span>
+                    </a>
+                    <a id="quick-instagram" href="https://www.instagram.com/uuvitu__?mdxt=MTVuaG5hdjFxbGllYg==" target="_blank" class="social-card bg-slate-900 border border-bebop-border hover:border-bebop-amber p-2 rounded flex items-center gap-2 text-slate-300 hover:text-bebop-amber">
+                        <i class="fa-brands fa-instagram text-sm"></i>
+                        <span class="truncate">Instagram</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Sector Radar Widget -->
+            <div class="bg-bebop-panel border border-bebop-border rounded-lg p-4 flex flex-col items-center">
+                <div class="w-full flex justify-between items-center mb-2 font-mono text-xs text-bebop-cyan">
+                    <span><i class="fa-solid fa-radar"></i> SECTOR SCAN</span>
+                    <span class="animate-pulse">MARS/ORBIT</span>
+                </div>
+                <div class="relative w-36 h-36 sm:w-44 sm:h-44 rounded-full border-2 border-bebop-cyan/40 bg-slate-950 flex items-center justify-center overflow-hidden">
+                    <div class="absolute w-28 h-28 sm:w-32 sm:h-32 rounded-full border border-bebop-cyan/20"></div>
+                    <div class="absolute w-16 h-16 sm:w-20 sm:h-20 rounded-full border border-bebop-cyan/20"></div>
+                    <div class="absolute w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-bebop-cyan/20"></div>
+                    <div class="absolute w-full h-[1px] bg-bebop-cyan/30"></div>
+                    <div class="absolute h-full w-[1px] bg-bebop-cyan/30"></div>
+                    <div class="absolute w-full h-full rounded-full origin-center animate-[spin_4s_linear_infinite]"
+                         style="background: conic-gradient(from 0deg, rgba(6,182,212,0.4) 0deg, transparent 60deg, transparent 360deg);"></div>
+                    <div class="absolute top-6 right-8 sm:top-8 sm:right-10 w-2 h-2 bg-bebop-red rounded-full animate-ping"></div>
+                    <div class="absolute bottom-8 left-10 sm:bottom-10 sm:left-12 w-2 h-2 bg-bebop-amber rounded-full"></div>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- CENTER SECTION: RESPONSIVE VIDEO TRANSMISSION -->
+        <section class="lg:col-span-6 space-y-4 sm:space-y-6 w-full order-1 lg:order-2">
+
+            <!-- VIEW 1: COWBOY BEBOP VIDEO TRANSMISSION -->
+            <div id="view-bounty-board" class="view-content space-y-4">
+                <div class="bg-bebop-panel border border-bebop-border rounded-lg p-3.5 sm:p-4 space-y-3 shadow-xl">
+                    <div class="flex items-center justify-between border-b border-bebop-border pb-2">
+                        <h2 class="text-xs sm:text-md font-bold text-bebop-amber font-mono flex items-center gap-2 glow-amber">
+                            <i class="fa-solid fa-tv"></i> COWBOY BEBOP TRANSMISSION (10 MIN)
+                        </h2>
+                        <span class="text-[9px] sm:text-[10px] font-mono bg-bebop-orange text-slate-950 font-bold px-2 py-0.5 rounded animate-pulse">
+                            LIVE FEED
+                        </span>
+                    </div>
+
+                    <!-- Video Iframe perfeitamente responsivo (sem overflow) -->
+                    <div class="responsive-video-container bg-black rounded-lg overflow-hidden border border-bebop-border shadow-inner">
+                        <iframe 
+                            src="https://www.youtube-nocookie.com/embed/VUWidkTr4BA?si=Jge7ZkOKUJ-v7TqK&amp;start=127"
+                            title="YouTube video player" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+
+                    <div class="bg-slate-900 border border-bebop-border rounded p-2.5 font-mono text-xs flex justify-between items-center text-bebop-muted">
+                        <span class="text-emerald-400"><i class="fa-solid fa-signal"></i> 1080p SYNTH STREAM</span>
+                        <span class="text-bebop-amber">SEE YOU SPACE COWBOY...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 2: MY STATION (SPOTIFY & LINKS CONFIGURATOR) -->
+            <div id="view-my-station" class="view-content hidden space-y-6">
+                <!-- Spotify Integration Widget -->
+                <div class="bg-bebop-panel border border-bebop-border rounded-lg p-4 sm:p-5 space-y-4">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-bebop-border pb-3 gap-2">
+                        <div>
+                            <h2 class="text-base sm:text-lg font-bold text-emerald-400 font-mono flex items-center gap-2">
+                                <i class="fa-brands fa-spotify text-2xl"></i> BEBOP AUDIO TRANSMITTER
+                            </h2>
+                            <p class="text-xs font-mono text-bebop-muted">Embed your Spotify playlist or track link below for background jazz vibes.</p>
+                        </div>
+                        <span class="text-[10px] font-mono bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded self-start sm:self-auto">LIVE FEED</span>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <input type="text" id="spotifyUrlInput"
+                            placeholder="Paste Spotify Embed URL or Playlist Link..."
+                            value="https://open.spotify.com/playlist/1nH4oRGxIXnelHXFicInqs?si=186c4fbd14d841d1"
+                            class="flex-1 bg-slate-950 border border-bebop-border rounded px-3 py-1.5 text-xs font-mono text-slate-200 focus:outline-none focus:border-emerald-500">
+                        <button onclick="updateSpotifyEmbed()"
+                            class="bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold font-mono px-4 py-1.5 rounded text-xs transition shrink-0">
+                            LOAD DECK
+                        </button>
+                    </div>
+
+                    <div class="w-full bg-slate-950 border border-bebop-border rounded overflow-hidden shadow-inner h-[152px]">
+                        <iframe id="spotifyIframe" style="border-radius:12px"
+                            src="https://open.spotify.com/embed/playlist/37i9dQZF1DXbTxeR81vO2M?utm_source=generator&theme=0"
+                            width="100%" height="152" frameBorder="0" allowfullscreen=""
+                            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                            loading="lazy"></iframe>
+                    </div>
+                </div>
+
+                <!-- Developer Links Configurator -->
+                <div class="bg-bebop-panel border border-bebop-border rounded-lg p-4 sm:p-5 space-y-4">
+                    <h2 class="text-base sm:text-lg font-bold text-bebop-amber font-mono flex items-center gap-2 border-b border-bebop-border pb-2">
+                        <i class="fa-solid fa-sliders"></i> PORTFOLIO & SOCIAL LINK CONFIGURATOR
+                    </h2>
+                    <p class="text-xs font-mono text-bebop-muted">Configure your personal endpoints.</p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono text-xs">
+                        <div>
+                            <label class="block text-slate-300 mb-1"><i class="fa-brands fa-github text-bebop-amber"></i> GITHUB URL:</label>
+                            <input type="text" id="input-github" value="https://github.com/vitormanoelferreiraa-creator" oninput="saveLinks()"
+                                class="w-full bg-slate-950 border border-bebop-border rounded p-2 text-slate-200 focus:border-bebop-amber focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-slate-300 mb-1"><i class="fa-brands fa-linkedin text-bebop-cyan"></i> LINKEDIN URL:</label>
+                            <input type="text" id="input-linkedin" value="https://www.linkedin.com" oninput="saveLinks()"
+                                class="w-full bg-slate-950 border border-bebop-border rounded p-2 text-slate-200 focus:border-bebop-cyan focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-slate-300 mb-1"><i class="fa-solid fa-globe text-bebop-amber"></i> PORTFOLIO:</label>
+                            <input type="text" id="input-portfolio" value="https://my-portfolio.dev" oninput="saveLinks()"
+                                class="w-full bg-slate-950 border border-bebop-border rounded p-2 text-slate-200 focus:border-bebop-amber focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-slate-300 mb-1"><i class="fa-brands fa-x-instagram text-slate-300"></i> instagram / X:</label>
+                            <input type="text" id="input-instagram" value="https://instagram.com/uuvitu__" oninput="saveLinks()"
+                                class="w-full bg-slate-950 border border-bebop-border rounded p-2 text-slate-200 focus:border-bebop-amber focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 3: CREW LOG -->
+            <div id="view-crew-log" class="view-content hidden space-y-4">
+                <div class="bg-bebop-panel border border-bebop-border rounded-lg p-5">
+                    <h2 class="text-lg font-bold text-bebop-amber border-b border-bebop-border pb-2 mb-4 font-mono">
+                        BEBOP CREW MANIFEST & LOGS
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-xs">
+                        <div class="bg-slate-900 p-3 rounded border border-bebop-border flex gap-3">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop" class="w-12 h-12 rounded border border-bebop-amber object-cover shrink-0" alt="Jet Black">
+                            <div>
+                                <h3 class="text-bebop-amber font-bold text-sm">JET BLACK</h3>
+                                <p class="text-bebop-muted">Captain / Ex-ISSP</p>
+                                <p class="mt-1 text-slate-300">"Check the bonsai trees before taking off for Venus."</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-900 p-3 rounded border border-bebop-border flex gap-3">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150&auto=format&fit=crop" class="w-12 h-12 rounded border border-bebop-amber object-cover shrink-0" alt="Faye Valentine">
+                            <div>
+                                <h3 class="text-bebop-amber font-bold text-sm">FAYE VALENTINE</h3>
+                                <p class="text-bebop-muted">Bounty Hunter</p>
+                                <p class="mt-1 text-slate-300">"Borrowed 20,000 Woolong for Casino Night. Don't ask."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW 4: TELEMETRY -->
+            <div id="view-system-telemetry" class="view-content hidden space-y-4">
+                <div class="bg-bebop-panel border border-bebop-border rounded-lg p-5 font-mono text-xs">
+                    <h2 class="text-lg font-bold text-bebop-cyan border-b border-bebop-border pb-2 mb-4">
+                        SYSTEM DIAGNOSTICS & DEEP SPACE TELEMETRY
+                    </h2>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>ORBITAL DATA FEED LINK</span>
+                                <span class="text-emerald-400">99.4% STABLE</span>
+                            </div>
+                            <div class="w-full bg-slate-900 h-2 rounded overflow-hidden">
+                                <div class="bg-emerald-500 h-full w-[99.4%]"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>MONO-RACER SWORDFISH ENGINE THRUST</span>
+                                <span class="text-bebop-amber">88.1% OPTIMAL</span>
+                            </div>
+                            <div class="w-full bg-slate-900 h-2 rounded overflow-hidden">
+                                <div class="bg-bebop-amber h-full w-[88%]"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- RIGHT SIDEBAR -->
+        <aside class="lg:col-span-3 space-y-4 sm:space-y-6 w-full order-3">
+            <div class="bg-bebop-panel border border-bebop-border rounded-lg p-4 font-mono text-xs">
+                <h4 class="text-bebop-cyan font-bold mb-2 flex items-center justify-between border-b border-bebop-border pb-1">
+                    <span><i class="fa-solid fa-terminal"></i> ISSP LIVE TERMINAL</span>
+                    <span class="inline-block w-2 h-2 bg-bebop-cyan rounded-full animate-ping"></span>
+                </h4>
+                <div id="terminalLog" class="h-36 sm:h-48 overflow-y-auto space-y-1 text-[11px] text-slate-400 pr-1">
+                    <p class="text-emerald-400">[SYSTEM]: Connection established to ISSP Net.</p>
+                    <p>[02:14:02]: Transmission online.</p>
+                    <p>[02:15:20]: Woolong market updated.</p>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-amber-950/60 to-orange-950/60 border border-bebop-amber/40 rounded-lg p-4 text-center">
+                <span class="text-[10px] font-mono text-bebop-amber tracking-widest block uppercase">WEEKLY BROADCAST</span>
+                <h3 class="font-bold text-bebop-orange text-lg glow-amber my-1">BIG SHOT TV!</h3>
+                <p class="text-xs font-mono text-slate-300">Hosted by Punch & Judy</p>
+                <p class="text-[11px] text-bebop-muted mt-2">"Tune in for live updates and gun safety tips, Amigos!"</p>
+            </div>
+        </aside>
+
+    </main>
+
+    <!-- Script Externo -->
+    <script src="./cowboy/cowboy.js"></script>
+</body>
+</html>
