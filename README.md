@@ -89,7 +89,7 @@ BEBOP-NET/
 └── img/
     └── spaik.jpeg
 ```
-
+visite o site:https://vitormanoelferreiraa-creator.github.io/site-cowboybebop/
 **Responsabilidade de cada arquivo:**
 
 - `index.html`: estrutura principal, componentes e organização das seções.
